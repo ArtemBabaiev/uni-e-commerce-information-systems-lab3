@@ -43,7 +43,7 @@ public class EncryptTest {
     void generateEncryptedCipherMessage() throws NoSuchAlgorithmException {
 
         String rsa = CryptoUtils.encryptRsa64("""
-                ЗАГ+0000'ПОЧ'ДЧП+20250329:2216:24'ОПП+0001'ШИФ+DES'КЛШ+W4xDx0VGops='ВІН+ErZ5NmXyfbM='КІП'КІН+0008'
+                ЗАГ+0000'ПОЧ'ДЧП+20250329:2216:24'ОПП+0001'ШИФ+DES'КЛШ+1cTLeg0QvJQ='ВІН+TNpRMnu+Y6Y='КІП'КІН+0008'
                 """.getBytes(StandardCharsets.UTF_8));
 
         System.out.println(rsa);
@@ -52,15 +52,13 @@ public class EncryptTest {
     @Test
     void generatePaymentMessage() throws NoSuchAlgorithmException {
         var decoder = Base64.getDecoder();
-        byte[] key = decoder.decode("W4xDx0VGops=");
-        byte[] iv = decoder.decode("vs+FAg+xfP4=");
+        byte[] key = decoder.decode("1cTLeg0QvJQ=");
+        byte[] iv = decoder.decode("TNpRMnu+Y6Y=");
 
         String des = CryptoUtils.encryptDes64(key, iv, """
-                ЗАГ+0002'ПОЧ'ДЧП+20100910:1048:24'ДОК+ОПЛ'ПЛА+ТОВ \
-                «Кооператор»'БКВ+Чернівецьке відділення КБ «Приватбанк»'МФВ+356032' \
-                РХВ+2600123456789'ОТР+ТОВ «Калинівський ринок»' БКО+ЧФ АКБ \
-                «Укрексімбанк»'МФО+356026'РХО+2600987654321'ОПП+Оплата за товар по \
-                рахунку №23 від 10.09.2010 р.'ВАЛ+грн.'СУМ+10000'КІП'КІН+0016'
+                ЗАГ+0000'ПОЧ'ДЧП+20250401:2018:24'ДОК+ОПЛ'ПЛА+ТОВ "Кооператор"'БКВ+Чернівецьке відділення КБ "Приватбанк"' \
+                МФВ+356032'РХВ+2600123456789'ОТР+ТОВ "Калинівський ринок"'БКО+ЧФ АКБ "Укрексімбанк"'МФО+356026'РХО+2600987654321'\
+                ОПП+Оплата за товар по рахунку №23 від 10.09.2010 р;'ВАЛ+грн'СУМ+10000'КІП'КІН+0016'
                 """.getBytes(StandardCharsets.UTF_8));
         System.out.println(des);
 
@@ -69,8 +67,8 @@ public class EncryptTest {
     @Test
     void generateInvoiceMessage() throws NoSuchAlgorithmException {
         var decoder = Base64.getDecoder();
-        byte[] key = decoder.decode("W4xDx0VGops=");
-        byte[] iv = decoder.decode("vs+FAg+xfP4=");
+        byte[] key = decoder.decode("1cTLeg0QvJQ=");
+        byte[] iv = decoder.decode("TNpRMnu+Y6Y=");
 
         String des = CryptoUtils.encryptDes64(key, iv, """
                 ЗАГ+0003'ПОЧ'ДЧП+20250330:1145:24'ДОК+НАК'ПОК+ТОВ «УкрТоргСервіс»'ОТР+ТОВ «КиївМаркет»'ТОВ+Пральний порошок "CleanPro"' \

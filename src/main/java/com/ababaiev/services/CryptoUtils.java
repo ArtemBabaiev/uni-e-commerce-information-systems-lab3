@@ -80,7 +80,7 @@ public class CryptoUtils {
         Base64.Decoder decoder = Base64.getDecoder();
         byte[] messageBytes = decoder.decode(message64);
 
-        Cipher cipher = Cipher.getInstance("RSA");
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] decrypted = cipher.doFinal(messageBytes);
 
@@ -123,7 +123,7 @@ public class CryptoUtils {
     @SneakyThrows
     public static String encryptRsa64(byte[] message) {
 
-        Cipher cipher = Cipher.getInstance("RSA");
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         byte[] decrypted = cipher.doFinal(message);
 
