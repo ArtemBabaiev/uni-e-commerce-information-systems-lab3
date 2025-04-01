@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Платіжне повідомлення</title>
+    <style>
+        @font-face {
+            font-family: 'Verdana';
+            src: url(fonts/verdana.ttf);
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: Verdana;
+            margin: 2em;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .section {
+            margin-bottom: 1.5em;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 1em;
+            background-color: #f9f9f9;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+            color: #34495e;
+        }
+        .row {
+            margin-bottom: 0.4em;
+        }
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<!-- @thymesVar id="model" type="com.ababaiev.models.EdiMessage" -->
+<h2>Платіжне повідомлення</h2>
+
+<div class="section">
+    <div class="section-title">🔹 Платник</div>
+    <div class="row"><span class="label">Назва:</span> <span th:text="${model.payerName}">ТОВ Платник</span></div>
+    <div class="row"><span class="label">Банк:</span> <span th:text="${model.senderBankName}">Банк Платника</span></div>
+    <div class="row"><span class="label">МФО:</span> <span th:text="${model.senderBankMFO}">000000</span></div>
+    <div class="row"><span class="label">Рахунок:</span> <span th:text="${model.senderBankAccount}">UA000000000000</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔸 Отримувач</div>
+    <div class="row"><span class="label">Назва:</span> <span th:text="${model.recipientName}">ТОВ Отримувач</span></div>
+    <div class="row"><span class="label">Банк:</span> <span th:text="${model.recipientBankName}">Банк Отримувача</span></div>
+    <div class="row"><span class="label">МФО:</span> <span th:text="${model.recipientBankMFO}">111111</span></div>
+    <div class="row"><span class="label">Рахунок:</span> <span th:text="${model.recipientBankAccount}">UA111111111111</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">💸 Деталі платежу</div>
+    <div class="row"><span class="label">Сума:</span> <span th:text="${model.totalAmount}">10000</span></div>
+    <div class="row"><span class="label">Валюта:</span> <span th:text="${model.paymentCurrency}">грн</span></div>
+    <div class="row"><span class="label">Призначення:</span> <span th:text="${model.paymentPurposeOrItemDescription}">Оплата за товар</span></div>
+</div>
+
+</body>
+</html>

@@ -1,16 +1,10 @@
-package com.ababaiev;
+package com.ababaiev.services;
 
-import com.ababaiev.converters.Converter;
-import com.ababaiev.converters.SName;
-import com.ababaiev.models.MessageTypes;
-import com.ababaiev.models.Segment;
-import com.ababaiev.models.SegmentNames;
+import com.ababaiev.annotations.SName;
+import com.ababaiev.models.*;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EdiService {
 
@@ -25,7 +19,9 @@ public class EdiService {
         }
     }
 
-    public static EdiMessage process(String ediString) {
+    PdfService pdfService = new PdfService();
+
+    public EdiMessage process(String ediString) {
         List<Segment> segments = parseSegments(ediString);
         segments = validateSegments(segments);
         EdiMessage ediMessage = convertToPoJo(segments);
@@ -33,7 +29,7 @@ public class EdiService {
         return ediMessage;
     }
 
-    public static List<Segment> parseSegments(String message) {
+    public List<Segment> parseSegments(String message) {
         System.out.println(message);
         boolean readingHeader = true;
         boolean readingValue = false;
@@ -42,6 +38,10 @@ public class EdiService {
         List<Segment> segments = new ArrayList<>();
         EdiMessage ediMessage = new EdiMessage();
         for (char entry : message.toCharArray()) {
+            if (entry == '+' && readingValue) {
+                valueBuilder.append(entry);
+                continue;
+            }
             if (entry == '+') {
                 readingHeader = false;
                 readingValue = true;
@@ -67,7 +67,7 @@ public class EdiService {
         return segments;
     }
 
-    public static List<Segment> validateSegments(List<Segment> segments) {
+    public List<Segment> validateSegments(List<Segment> segments) {
         List<Segment> validatedSegments = new ArrayList<>();
 
         if (segments.size() <= 2) {
@@ -116,7 +116,7 @@ public class EdiService {
         return validatedSegments;
     }
 
-    public static EdiMessage convertToPoJo(List<Segment> segments) {
+    public EdiMessage convertToPoJo(List<Segment> segments) {
         try {
             EdiMessage message = new EdiMessage();
             for (Segment segment : segments) {
@@ -133,7 +133,7 @@ public class EdiService {
         }
     }
 
-    public static MessageTypes determineType(List<Segment> segments) {
+    public MessageTypes determineType(List<Segment> segments) {
         if (segments.stream().anyMatch(segment -> segment.getName().equals(SegmentNames.CIPHER))) {
             return MessageTypes.CIPHER;
         }
@@ -143,5 +143,28 @@ public class EdiService {
         } else {
             return MessageTypes.INVOICE;
         }
+    }
+
+    public SessionConfig handleCipherMessage(List<Segment> segments) {
+        segments = validateSegments(segments);
+        var pojo = this.convertToPoJo(segments);
+        String base64Key = pojo.getEncryptionKey();
+        String base64Iv = pojo.getInitVector();
+        var decoder = Base64.getDecoder();
+        byte[] iv = decoder.decode(base64Iv);
+        byte[] key = decoder.decode(base64Key);
+        return SessionConfig.builder().sessionKey(key).iv(iv).build();
+    }
+
+    public byte[] handlePaymentMessage(List<Segment> segments) {
+        segments = validateSegments(segments);
+        var pojo = this.convertToPoJo(segments);
+        return pdfService.generatePdf(pojo, MessageTypes.PAYMENT);
+    }
+
+    public byte[] handleInvoiceMessage(List<Segment> segments) {
+        segments = validateSegments(segments);
+        var pojo = this.convertToPoJo(segments);
+        return pdfService.generatePdf(pojo, MessageTypes.INVOICE);
     }
 }

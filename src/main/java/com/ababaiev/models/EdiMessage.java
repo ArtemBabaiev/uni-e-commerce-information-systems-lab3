@@ -1,8 +1,6 @@
-package com.ababaiev;
+package com.ababaiev.models;
 
-import com.ababaiev.converters.SName;
-import com.ababaiev.models.MessageTypes;
-import com.ababaiev.models.SegmentNames;
+import com.ababaiev.annotations.SName;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,74 +24,74 @@ public class EdiMessage {
     private String messageEnd;
 
     @SName("НАЗ")
-    private String title;
+    private String documentTitle;
 
     @SName("ДЧП")
-    private String date;
+    private String dateTimePeriod;
 
     @SName("ПОК")
-    private String buyer;
+    private String buyerName;
 
     @SName("ОПП")
-    private String itemDescription;
+    private String paymentPurposeOrItemDescription;
 
     @SName("ПЛА")
-    private String payer;
+    private String payerName;
 
     @SName("ВАЛ")
-    private String currency;
+    private String paymentCurrency;
 
     @SName("ОТР")
-    private String recipient;
+    private String recipientName;
 
     @SName("ЦІН")
-    private String orderPrice;
+    private String unitPrice;
 
     @SName("КІЛ")
-    private String commodityQuantity;
+    private String itemQuantity;
 
     @SName(SegmentNames.DOCUMENT_NAME)
-    private String documentName;
+    private String documentType;
 
     @SName("ТОВ")
-    private String commodity;
+    private String itemName;
 
     @SName("ОДВ")
-    private String unitsOfMeasurement;
+    private String measurementUnit;
 
     @SName(value = "СУМ")
-    private Double sum;
+    private Double totalAmount;
 
     @SName("БКВ")
-    private String sendersBank;
+    private String senderBankName;
 
     @SName("РХВ")
-    private String sendersAccount;
+    private String senderBankAccount;
 
     @SName("БКО")
-    private String recipientsBank;
+    private String recipientBankName;
 
     @SName("РХО")
-    private String recipientsAccount;
+    private String recipientBankAccount;
 
     @SName("МФВ")
-    private String sendersBankMFI;
+    private String senderBankMFO;
 
     @SName("МФО")
-    private String recipientsBankMFI;
+    private String recipientBankMFO;
 
     @SName("ВІН")
-    private String initializationVector;
+    private String initVector;
 
     @SName(SegmentNames.CIPHER)
-    private String cipher;
+    private String encryptionAlgorithm;
 
     @SName("КЛШ")
-    private String cipherKey;
+    private String encryptionKey;
 
     @SName("АЦП")
-    private String eSignatureAlgorithm;
+    private String digitalSignatureAlgorithm;
 
     @SName("КЦП")
-    private String eSignatureVerificationKey;
+    private String signatureVerificationKey;
 }

@@ -1,5 +1,6 @@
 package com.ababaiev;
 
+import com.ababaiev.services.EdiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -7,11 +8,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class EdiTest {
+    EdiService ediService = new EdiService();
     @Test
     void testExtractionValidation() throws JsonProcessingException {
         var om = new ObjectMapper();
         om.enable(SerializationFeature.INDENT_OUTPUT);
-        var result = EdiService.parseSegments("""
+        var result = ediService.parseSegments("""
                     ЗАГ+0002'ПОЧ'ДЧП+20100910:1048:24'ДОК+ОПЛ'ПЛА+ТОВ \
                     «Кооператор»'БКВ+Чернівецьке відділення КБ «Приватбанк»'МФВ+356032' \
                     РХВ+2600123456789'ОТР+ТОВ «Калинівський ринок»' БКО+ЧФ АКБ \
@@ -21,7 +23,7 @@ public class EdiTest {
         System.out.println(json);
 
 
-        var validSegments = EdiService.validateSegments(result);
+        var validSegments = ediService.validateSegments(result);
         System.out.println(om.writeValueAsString(validSegments));
     }
 
@@ -29,7 +31,7 @@ public class EdiTest {
     void testExtractionValidation_Failed() throws JsonProcessingException {
         var om = new ObjectMapper();
         om.enable(SerializationFeature.INDENT_OUTPUT);
-        var result = EdiService.parseSegments("""
+        var result = ediService.parseSegments("""
                 ЗАГ+0002'ПОЧ'ДЧП+20100910:1048:24'ДОК+ОПЛ'ПЛА+ТОВ \
                 «Кооператор»'БКВ+Чернівецьке відділення КБ «Приватбанк»'МФВ+356032' \
                 РХВ+2600123456789'ОТР+ТОВ «Калинівський ринок»' БКО+ЧФ АКБ \
@@ -37,14 +39,14 @@ public class EdiTest {
                 рахунку №23 від 10.09.2010 р.'ВАЛ+грн.'СУМ+10000'КІП'КІН+0015'""");
         var json = om.writeValueAsString(result);
         System.out.println(json);
-        Assertions.assertThrows(RuntimeException.class, () -> EdiService.validateSegments(result));
+        Assertions.assertThrows(RuntimeException.class, () -> ediService.validateSegments(result));
     }
 
     @Test
     void testProcess() throws JsonProcessingException {
         var om = new ObjectMapper();
         om.enable(SerializationFeature.INDENT_OUTPUT);
-        var result = EdiService.process("""
+        var result = ediService.process("""
                 ЗАГ+0002'ПОЧ'ДЧП+20100910:1048:24'ДОК+ОПЛ'ПЛА+ТОВ \
                 «Кооператор»'БКВ+Чернівецьке відділення КБ «Приватбанк»'МФВ+356032' \
                 РХВ+2600123456789'ОТР+ТОВ «Калинівський ринок»' БКО+ЧФ АКБ \

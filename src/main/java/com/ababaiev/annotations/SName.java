@@ -1,4 +1,4 @@
-package com.ababaiev.converters;
+package com.ababaiev.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;

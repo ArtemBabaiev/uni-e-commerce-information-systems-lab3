@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"></meta>
+    <title>Накладна</title>
+    <style>
+        @font-face {
+            font-family: 'Verdana';
+            src: url(fonts/verdana.ttf);
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: Verdana;
+            margin: 2em;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .section {
+            margin-bottom: 1.5em;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 1em;
+            background-color: #f9f9f9;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 0.5em;
+            color: #34495e;
+        }
+        .row {
+            margin-bottom: 0.4em;
+        }
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<!-- @thymesVar id="model" type="com.ababaiev.models.EdiMessage" -->
+<h2>Накладна</h2>
+
+<div class="section">
+    <div class="section-title">🛒 Покупець</div>
+    <div class="row"><span class="label">Назва:</span> <span th:text="${model.buyerName}">ТОВ Покупець</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🚚 Отримувач</div>
+    <div class="row"><span class="label">Назва:</span> <span th:text="${model.recipientName}">ТОВ Отримувач</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">📦 Товар</div>
+    <table>
+        <thead>
+        <tr>
+            <th>Назва товару</th>
+            <th>Кількість</th>
+            <th>Ціна (за одиницю)</th>
+            <th>Одиниця виміру</th>
+            <th>Сума</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${model.itemName}">Товар A</td>
+            <td th:text="${model.itemQuantity}">10</td>
+            <td th:text="${model.unitPrice}">100</td>
+            <td th:text="${model.measurementUnit}">шт</td>
+            <td th:text="${model.totalAmount}">1000</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-title">📝 Коментар</div>
+    <div class="row"><span th:text="${model.paymentPurposeOrItemDescription}">Поставка за договором №123</span></div>
+</div>
+
+</body>
+</html>
