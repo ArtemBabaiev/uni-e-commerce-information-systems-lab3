@@ -1,0 +1,2 @@
+Generated DES Key (Base64): W4xDx0VGops=
+Generated IV (Base64): vs+FAg+xfP4=
